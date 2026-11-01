@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>DNSLYTIC — DNS Lookup Tool</title>
+
+    <meta
+        name="description"
+        content="DNSLYTIC is a DNS lookup tool for inspecting DNS records quickly and clearly."
+    >
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Main stylesheet -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <div class="topbar-inner">
+
+            <a
+                href="/"
+                class="logo"
+            >
+                DNSLYTIC
+            </a>
+
+
+            <nav class="main-nav">
+
+                <a
+                    href="/"
+                    class="nav-item active"
+                >
+                    DNS Lookup
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="container">
+
+
+        <!-- =================================================
+             TOOL HEADER
+             ================================================= -->
+
+        <section class="tool-header">
+
+            <div class="breadcrumb">
+
+                DNSLYTIC
+
+                <span>/</span>
+
+                DNS TOOLS
+
+                <span>/</span>
+
+                DNS LOOKUP
+
+            </div>
+
+
+            <h1>
+                DNS Lookup
+            </h1>
+
+
+            <p>
+                Query DNS records for a domain and inspect its
+                current DNS configuration.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SEARCH BOX
+             ================================================= -->
+
+        <section class="lookup-box">
+
+
+            <div class="lookup-title">
+
+                <div>
+
+                    <strong>
+                        Domain Name
+                    </strong>
+
+                    <span>
+                        Enter a domain to begin the lookup.
+                    </span>
+
+                </div>
+
+
+                <span class="tool-code">
+                    DNS-01
+                </span>
+
+            </div>
+
+
+
+            <form
+                id="lookupForm"
+                class="lookup-form"
+            >
+
+
+                <div class="input-wrapper">
+
+
+                    <span class="input-prefix">
+                        https://
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="domainInput"
+                        placeholder="example.com"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+
+
+                </div>
+
+
+
+                <button
+                    id="lookupButton"
+                    type="submit"
+                >
+
+                    <span class="button-text">
+                        DNS LOOKUP
+                    </span>
+
+
+                    <span class="button-icon">
+                        →
+                    </span>
+
+                </button>
+
+
+            </form>
+
+
+
+            <div class="input-note">
+
+                <span class="info-icon">
+                    i
+                </span>
+
+
+                <span>
+                    Enter only the domain name.
+                    Do not include
+                    <code>https://</code>,
+                    paths, or query parameters.
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             RECORD TYPES
+             ================================================= -->
+
+        <section class="quick-tools">
+
+
+            <div class="quick-header">
+
+                <span>
+                    RECORD TYPES
+                </span>
+
+                <small>
+                    DNS records returned by the lookup
+                </small>
+
+            </div>
+
+
+
+            <div class="record-types">
+
+                <button type="button">
+                    A
+                </button>
+
+                <button type="button">
+                    AAAA
+                </button>
+
+                <button type="button">
+                    CAA
+                </button>
+
+                <button type="button">
+                    CNAME
+                </button>
+
+                <button type="button">
+                    MX
+                </button>
+
+                <button type="button">
+                    NS
+                </button>
+
+                <button type="button">
+                    TXT
+                </button>
+
+                <button type="button">
+                    SOA
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ERROR
+             ================================================= -->
+
+        <div
+            id="errorMessage"
+            class="error-message hidden"
+        ></div>
+
+
+
+        <!-- =================================================
+             RESULTS
+             ================================================= -->
+
+        <section
+            id="resultsSection"
+            class="results-section hidden"
+        >
+
+
+            <!-- =============================================
+                 RESULT HEADER
+                 ============================================= -->
+
+            <div class="results-toolbar">
+
+
+                <div>
+
+                    <div class="results-title">
+
+                        <h2>
+                            DNS Lookup Results
+                        </h2>
+
+
+                        <span
+                            id="resultStatus"
+                            class="status-badge"
+                        >
+                            RESOLVED
+                        </span>
+
+                    </div>
+
+
+
+                    <div class="result-domain">
+
+                        Domain:
+
+                        <strong id="resultDomain">
+                            example.com
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <button
+                    id="clearButton"
+                    type="button"
+                    class="clear-button"
+                >
+                    NEW LOOKUP
+                </button>
+
+
+            </div>
+
+
+
+            <!-- =============================================
+                 SUMMARY
+                 ============================================= -->
+
+            <div class="result-summary">
+
+
+                <div class="summary-item">
+
+                    <span>
+                        RECORDS
+                    </span>
+
+
+                    <strong id="recordCount">
+                        0
+                    </strong>
+
+
+                    <small>
+                        records found
+                    </small>
+
+                </div>
+
+
+
+                <div class="summary-item">
+
+                    <span>
+                        RESPONSE
+                    </span>
+
+
+                    <strong id="responseTime">
+                        0 ms
+                    </strong>
+
+
+                    <small>
+                        lookup time
+                    </small>
+
+                </div>
+
+
+
+                <div class="summary-item">
+
+                    <span>
+                        RECORD TYPES
+                    </span>
+
+
+                    <strong id="recordTypeCount">
+                        0
+                    </strong>
+
+
+                    <small>
+                        types returned
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =============================================
+                 RECORD TABLE HEADER
+                 ============================================= -->
+
+            <div class="results-heading">
+
+
+                <div>
+
+                    <h3>
+                        DNS Records
+                    </h3>
+
+
+                    <p>
+                        Records returned by the DNS resolver.
+                    </p>
+
+                </div>
+
+
+                <span class="live-label">
+                    LIVE RESULT
+                </span>
+
+
+            </div>
+
+
+
+            <!-- =============================================
+                 RECORD TABLE
+                 ============================================= -->
+
+            <div class="dns-table">
+
+
+                <div class="dns-table-header">
+
+                    <div>
+                        TYPE
+                    </div>
+
+
+                    <div>
+                        RECORD
+                    </div>
+
+
+                    <div>
+                        VALUE
+                    </div>
+
+
+                    <div>
+                        ACTION
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    id="recordsContainer"
+                    class="dns-table-body"
+                ></div>
+
+
+            </div>
+
+
+
+            <!-- =============================================
+                 DNS EXPLANATION
+                 ============================================= -->
+
+            <section class="dns-explainer">
+
+
+                <div class="explainer-heading">
+
+                    <h3>
+                        Understanding DNS Records
+                    </h3>
+
+
+                    <p>
+                        New to DNS? Here is what each common
+                        record type means.
+                    </p>
+
+                </div>
+
+
+
+                <div class="explainer-grid">
+
+
+                    <!-- A -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            A
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                IPv4 Address
+                            </strong>
+
+
+                            <p>
+                                Connects a domain name to an
+                                IPv4 address so devices can
+                                find the server hosting it.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- AAAA -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            AAAA
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                IPv6 Address
+                            </strong>
+
+
+                            <p>
+                                Connects a domain name to an
+                                IPv6 address, the newer version
+                                of the Internet Protocol.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CAA -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            CAA
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Certificate Authority
+                            </strong>
+
+
+                            <p>
+                                Specifies which Certificate
+                                Authorities are allowed to issue
+                                HTTPS certificates for a domain.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CNAME -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            CNAME
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Canonical Name
+                            </strong>
+
+
+                            <p>
+                                Points one domain or subdomain
+                                to another domain name.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- MX -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            MX
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Mail Server
+                            </strong>
+
+
+                            <p>
+                                Tells email systems which
+                                servers are responsible for
+                                receiving email for the domain.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- NS -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            NS
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Name Server
+                            </strong>
+
+
+                            <p>
+                                Shows the DNS servers responsible
+                                for managing DNS information
+                                for the domain.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TXT -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            TXT
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Text Record
+                            </strong>
+
+
+                            <p>
+                                Stores text information commonly
+                                used for verification, SPF,
+                                security policies and other
+                                DNS-based configuration.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- SOA -->
+
+                    <div class="explainer-item">
+
+                        <span>
+                            SOA
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                Start of Authority
+                            </strong>
+
+
+                            <p>
+                                Contains administrative and
+                                timing information about a
+                                domain's DNS zone.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="footer">
+
+
+        <div class="footer-inner">
+
+
+            <div class="footer-brand">
+
+                <strong>
+                    DNSLYTIC
+                </strong>
+
+
+                <span>
+                    DNS Intelligence & Network Tools
+                </span>
+
+            </div>
+
+
+            <div class="footer-right">
+
+                <span>
+                    v1.0
+                </span>
+
+
+                <span>
+                    Built for network discovery & learning
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script
+    src="{{ url_for('static', filename='js/app.js') }}"
+></script>
+
+
+</body>
+
+</html>

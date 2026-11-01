@@ -191,25 +191,6 @@ I built DNSLYTIC as a practical project to:
 
 ---
 
-## Future Improvements
-
-Planned improvements include:
-
-- [ ] DNS propagation checking
-- [ ] Reverse DNS lookup
-- [ ] TXT record inspection
-- [ ] SRV record support
-- [ ] CNAME record support
-- [ ] DNSSEC information
-- [ ] WHOIS lookup
-- [ ] More detailed DNS diagnostics
-- [ ] Export lookup results
-- [ ] API endpoint
-- [ ] Improved error handling
-- [ ] More network intelligence features
-
----
-
 ## Disclaimer
 
 DNSLYTIC is intended for **educational, defensive, and legitimate network discovery purposes**.

@@ -172,19 +172,6 @@ python3 app.py
 
 The application will then be available through your local Flask server.
 
----
-
-## Screenshots
-
-Screenshots of DNSLYTIC are included in the `screenshots/` directory.
-
-### DNS Lookup
-
-_Add your main application screenshot here._
-
-```text
-screenshots/dns-lookup.png
-```
 
 ---
 
